@@ -1,11 +1,19 @@
 require 'rails_helper'
 
 RSpec.describe "/videos", type: :request do
+  let(:category_id) {
+    Category.create({
+      title: Faker::Sports::Football.competition,
+      color: Faker::Color.hex_color
+    }).id
+  }
+
   let(:valid_attributes) {
     {
       title: Faker::Superhero.descriptor,
       description: Faker::Lorem.sentence(word_count: 9),
-      url: Faker::Internet.url
+      url: Faker::Internet.url,
+      category_id: category_id
     }
   }
 
