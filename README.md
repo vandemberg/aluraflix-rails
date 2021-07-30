@@ -1,24 +1,67 @@
-# README
+# Desafio Aluraflix
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Esse projeto foi um desafio preparado pela alura, objetivo é construir uma API REST utilizando qualquer linguagem de programação. Para mais dúvidas procure por ALURA CHALLENGES BACK-END
 
-Things you may want to cover:
+### Documentação da API:
 
-* Ruby version
+#### Videos:
+  - /videos - GET - Lista todos os vídeos)
+    ```
+    payload:
+    videos: [{id, description, title, url}]
+    ```
+  - /videos/:id - GET - Detalhes de um vídeo
+    ```
+    video: {id, description, title, url}
+    ```
+  - /videos - POST - Criar um vídeo novo
+    ```
+    REGRAS:
+      * title deve conter entre 2..60 caracteres
+      * description deve conter entre 6..255 caracteres
+      * url deve ser uma URL valida
+    params:
+    {
+      video: {
+        description, title, url
+      }
+    }
+    
+    payload:
+    video: {
+      id, description, url, title
+    }
+    ```
+   - /videos/:id - PATCH - Editar um vídeo
+     ```
+      REGRAS:
+        * title deve conter entre 2..60 caracteres
+        * description deve conter entre 6..255 caracteres
+        * url deve ser uma URL valida
+        params: {
+          video: {description, title, url}
+        }
 
-* System dependencies
+        payload:
+        video: { id, title, descriptionm url }
+     ```
+   - /videos/:id - DELETE - Remove um vídeo
+     ```
+     payload:
+      NO CONTENTT
+     ```
+   
+### Como rodar o projeto:
 
-* Configuration
+Você vai precisar ter instalado:
+- ruby 3
+- rails 6
+- postgresql
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+iniciando projeto:
+- git clone https://github.com/vandemberg/aluraflix-rails
+- cd aluraflix-rails
+- bundle
+- rails db:create
+- rails db:migrate
+bundle exec rspec
