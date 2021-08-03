@@ -1,23 +1,26 @@
 require 'rails_helper'
 
 RSpec.describe "CategoryVideos", type: :request do
+  let(:token) {
+    JsonWebToken.encode(user_id: create(:user).id)
+  }
+
+  let(:valid_headers) {
+    {
+      Authorization: "Bearer #{token}"
+    }
+  }
+
   describe "GET /index" do
     it "should list all videos related with the category" do
-      category = Category.create({
-        title: Faker::Sports::Football.competition,
-        color: Faker::Color.hex_color
-      })
+      category = create(:category)
+      count_videos = 5
 
-      [1,2].each do
-        Video.create({
-          title: Faker::Superhero.descriptor,
-          description: Faker::Lorem.sentence(word_count: 9),
-          url: Faker::Internet.url,
-          category_id: category.id,
-        })
-      end
+      FactoryBot.create_list(:video, count_videos, category_id: category.id)
 
-      expect(Video.where(category_id: category.id ).count).to eq(2)
+      get "/categories/#{category.id}/videos", headers: valid_headers, as: :json
+
+      expect(JSON.parse(response.body).length).to eq(5)
     end
   end
 end

@@ -71,6 +71,17 @@ RSpec.describe "/videos", type: :request do
     end
   end
 
+  describe "GET /free" do
+    it "renders a successful response" do
+      count_videos = 12
+      FactoryBot.create_list(:video, count_videos)
+      get "/videos/free", as: :json
+
+      expect(response).to be_successful
+      expect(JSON.parse(response.body).length).to eq(5)
+    end
+  end
+
   describe "GET /show" do
     it "renders a successful response" do
       video = Video.create! valid_attributes

@@ -7,9 +7,9 @@ class ApplicationController < ActionController::API
       @decoded = JsonWebToken.decode(header)
       @current_user = User.find(@decoded[:user_id])
     rescue ActiveRecord::RecordNotFound => _e
-      render json: "Credenciais inválidas", status: :unauthorized
+      render json: { error: "Credenciais inválidas" }, status: :unauthorized
     rescue JWT::DecodeError => _e
-      render json: "Credenciais inválidas", status: :unauthorized
+      render json: {error: "Credenciais inválidas" }, status: :unauthorized
     end
   end
 end

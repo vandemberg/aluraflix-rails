@@ -1,5 +1,5 @@
 class VideosController < ApplicationController
-  before_action :authorize_request
+  before_action :authorize_request, except: [:free]
   before_action :set_video, only: [:show, :update, :destroy]
 
   # GET /videos
@@ -42,6 +42,12 @@ class VideosController < ApplicationController
   # DELETE /videos/1
   def destroy
     @video.destroy
+  end
+
+  def free
+    @videos = Video.limit(5)
+
+    render json: @videos
   end
 
   private

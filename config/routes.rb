@@ -7,5 +7,6 @@ Rails.application.routes.draw do
     get("/videos", { to: "category_videos#index" })
   end
 
+  get("/videos/free", { to: "videos#free"})
   resources :videos
 end
