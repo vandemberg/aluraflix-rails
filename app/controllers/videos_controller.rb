@@ -3,7 +3,12 @@ class VideosController < ApplicationController
 
   # GET /videos
   def index
-    @videos = Video.all
+    @videos =
+      if params[:search].present?
+        Video.where("title like ?", "%#{params[:search]}%")
+      else
+        Video.all
+      end
 
     render json: @videos
   end

@@ -35,6 +35,22 @@ RSpec.describe "/videos", type: :request do
       get videos_url, headers: valid_headers, as: :json
       expect(response).to be_successful
     end
+
+    it "should get videos from search" do
+      Video.create! valid_attributes
+
+      [1,2,3,4].each do |key|
+        Video.create!({
+          title: "Teste #{key}",
+          description: Faker::Lorem.sentence(word_count: 9),
+          url: Faker::Internet.url,
+          category_id: category_id
+        })
+      end
+
+      get "#{videos_url}?search=Teste", headers: valid_headers, as: :json
+      expect(JSON.parse(response.body).length).to eq(4)
+    end
   end
 
   describe "GET /show" do
