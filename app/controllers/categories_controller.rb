@@ -1,9 +1,10 @@
 class CategoriesController < ApplicationController
+  before_action :authorize_request
   before_action :set_category, only: [:show, :update, :destroy]
 
   # GET /categories
   def index
-    @categories = Category.all
+    @categories = Category.offset(params[:page] || 1).limit(5)
 
     render json: @categories
   end

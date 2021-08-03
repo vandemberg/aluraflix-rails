@@ -13,7 +13,7 @@ RSpec.describe "/videos", type: :request do
       title: Faker::Superhero.descriptor,
       description: Faker::Lorem.sentence(word_count: 9),
       url: Faker::Internet.url,
-      category_id: category_id
+      category_id: category_id,
     }
   }
 
@@ -25,15 +25,33 @@ RSpec.describe "/videos", type: :request do
     }
   }
 
+  let(:token) {
+    JsonWebToken.encode(user_id: create(:user).id)
+  }
+
   let(:valid_headers) {
-    {}
+    {
+      Authorization: "Bearer #{token}"
+    }
   }
 
   describe "GET /index" do
     it "renders a successful response" do
-      Video.create! valid_attributes
+      count_videos = 12
+      FactoryBot.create_list(:video, count_videos)
       get videos_url, headers: valid_headers, as: :json
+
       expect(response).to be_successful
+      expect(JSON.parse(response.body).length).to eq(5)
+    end
+
+    it "renders a successful response page 2" do
+      count_videos = 12
+      FactoryBot.create_list(:video, count_videos)
+      get "#{videos_url}?page=2", headers: valid_headers, as: :json
+
+      expect(response).to be_successful
+      expect(JSON.parse(response.body).length).to eq(5)
     end
 
     it "should get videos from search" do
@@ -56,7 +74,7 @@ RSpec.describe "/videos", type: :request do
   describe "GET /show" do
     it "renders a successful response" do
       video = Video.create! valid_attributes
-      get video_url(video), as: :json
+      get video_url(video), headers: valid_headers, as: :json
       expect(response).to be_successful
     end
   end

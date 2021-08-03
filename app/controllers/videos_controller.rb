@@ -1,4 +1,5 @@
 class VideosController < ApplicationController
+  before_action :authorize_request
   before_action :set_video, only: [:show, :update, :destroy]
 
   # GET /videos
@@ -7,7 +8,7 @@ class VideosController < ApplicationController
       if params[:search].present?
         Video.where("title like ?", "%#{params[:search]}%")
       else
-        Video.all
+        Video.all.offset(params[:page] || 1).limit(5)
       end
 
     render json: @videos
